@@ -2,6 +2,7 @@ var express = require("express"),
     router  = express.Router(),
     Contact = require("../models/contact");
 //ROUTES
+
 //Home page--Works
 router.get("/", function(req ,res){
     res.send("The Home page");
@@ -12,16 +13,18 @@ router.get("/contacts",function(req , res){
     Contact.find().sort('name').exec(function(err, contacts) {
         if(err){
             console.log("Finding contacts error" + err);
+            res.json({"error": err});
         }else{
-            contacts.forEach(function(contact){
-                // res.send(contact.name , contact.number);
-                res.send("All the contacts");
-            });
+            res.json({"contacts": contacts});
+            // contacts.forEach(function(contact){
+            //     // res.send(contact.name , contact.number);
+            //     res.send("All the contacts");
+            // });
         }
       });
 });
 
-//New contact form --Doesn't work
+//New contact form --Works
 router.get("/contacts/new", function(req ,res){
     res.send("The new contact creation form");
 });
@@ -37,8 +40,10 @@ router.post("/contacts" , function(req , res){
     newContact.save(function(err , contact ){
         if(err){
             console.log(err);
+            res.send("not submitted");
         }
-        res.redirect("/contacts");
+        res.send("submitted");
+        // res.redirect("/phonebook/contacts");
     });
     // Contact.create(newContact , function(err ,createdContact ){
     //     if(err){

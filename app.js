@@ -14,7 +14,7 @@ mongoose.connect("mongodb://localhost/phonebook",{useUnifiedTopology : true, use
 //For parsing the request data
 app.use(bodyParser.urlencoded({extended:true}));
 //Connecting the route module
-app.use(contactRoutes);
+app.use("/phonebook",contactRoutes);
 //Method Override for PUT and DELETE requests
 app.use(methodOverride("_method"));
 
