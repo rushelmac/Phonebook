@@ -31,26 +31,27 @@ router.get("/contacts/new", function(req ,res){
 
 //Add contact to database
 router.post("/contacts" , function(req , res){
-    var newContact = new Contact ({
-        name : req.body.name,
-        number : req.body.number,
-        email : req.body.email
-    });
-
-    newContact.save(function(err , contact ){
-        if(err){
-            console.log(err);
-            res.send("not submitted");
-        }
-        res.send("submitted");
-        // res.redirect("/phonebook/contacts");
-    });
-    // Contact.create(newContact , function(err ,createdContact ){
-    //     if(err){
-    //         console.log("Couldn't Create Contact " + err);
-    //     }
-    //     res.redirect("/contacts");
+    // var newContact = new Contact ({
+    //     name : req.body.name,
+    //     number : req.body.number,
+    //     email : req.body.email
     // });
+
+    // newContact.save(function(err , contact ){
+    //     if(err){
+    //         console.log(err);
+    //         res.send("not submitted");
+    //     }
+    //     res.send("submitted");
+    //     // res.redirect("/phonebook/contacts");
+    // });
+    Contact.create(req.body.contact , function(err ,createdContact ){
+        if(err){
+            console.log("Couldn't Create Contact " + err);
+        }
+        console.log(req.body);
+        res.redirect("/contacts");
+    });
 });
 
 //View a specific contact full info
@@ -65,26 +66,38 @@ router.get("/contacts/:id", function(req ,res){
     });
 });
 
-//Delete contact
-router.delete("/contacts", function(req , res){
+//Delete contact -- works
+router.delete("/contacts/:id", function(req , res){
     Contact.findByIdAndDelete(req.params.id , function(err){
         if(err){
             console.log("Couldn't delete" + err);
         }
         res.redirect("/contacts");
     });
-    res.redirect("/contacts");
 });
 
-//Updtae contact
-router.put("/contact", function(req ,res){
-//The request contains contact info as an object of key calue pairs in the body
-    Contact.findByIdAndUpdate(req.params.id, req.body.contact , function(err , updatedContact){
+//Delete all -- works
+router.delete("/contacts/deleteall", function(req, res){
+    Contact.deleteMany({},function(err){
         if(err){
-            console.log("Couldn't update" + err);
+            res.send(err);
         }
         res.redirect("/contacts");
     });
 });
+
+//Updtae contact
+router.put("/contacts/:id", function(req ,res){
+//The request contains contact info as an object of key calue pairs in the body
+    Contact.findByIdAndUpdate(req.params.id, req.body.contact , function(err , updatedContact){
+        if(err){
+            console.log("Couldn't update" + err);
+            res.send("Couln't update");
+        }
+        // res.redirect("/contacts");
+        res.send("updated successfully");
+    });
+});
+
 
 module.exports = router;
