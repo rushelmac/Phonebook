@@ -73,3 +73,5 @@ var updateContact =  function(req ,res){
             res.send("updated successfully");
         });
     }
+
+module.exports = {getAllContacts , addContact , viewContact, deleteContact , deleteAll , updateContact}
